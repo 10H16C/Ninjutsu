@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed;//The speed of the player.
+    [SerializeField] private float startingSpeed;//The speed of the player at the start.
     [SerializeField] private float jumpForce;
     [SerializeField] private float deathJumpForce;
     [SerializeField] private float checkRadius;
@@ -19,12 +19,12 @@ public class PlayerMovement : MonoBehaviour
     private CapsuleCollider2D playerCollider;
     private float moveInput;//The input that the player gave to walk.
     private float nextFallTimer;
-    private ForceMode2D deathForce;//The force of the jump
     private bool isGrounded;
     private bool headCheck;
     private bool isJumping;
     private bool isAlive;
     private bool deathJump;
+    private float speed;//The speed of the player.
 
 
     // Start is called before the first frame update
@@ -32,33 +32,31 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = gameObject.GetComponentInParent<Rigidbody2D>();
         playerCollider = gameObject.GetComponentInParent<CapsuleCollider2D>();
-        deathForce = ForceMode2D.Impulse;
         isAlive = true;
+    }
+
+     void Start()
+    {
+        speed = startingSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        moveInput = Input.GetAxisRaw("Horizontal");
-        isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, ground);
-        headCheck = Physics2D.OverlapCircle(headPos.position, checkRadius, ground);
-
-    }
-
-
-    private void FixedUpdate()
-    {
-        if(!isAlive)
+        if (!isAlive)
         {
-            if(deathJump)
+            speed = 0;
+            if (deathJump)
             {
-                rb.AddForce(new Vector2(0, deathJumpForce), deathForce);
+                rb.velocity = Vector2.up * deathJumpForce;
                 deathJump = false;
             }
             StartCoroutine(DelayDeath(deathDelay));
             return;
         }
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        moveInput = Input.GetAxisRaw("Horizontal");
+        isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, ground);
+        headCheck = Physics2D.OverlapCircle(headPos.position, checkRadius, ground);
         if (isGrounded && Input.GetButtonDown("Jump"))
         {
             isJumping = true;
@@ -89,6 +87,12 @@ public class PlayerMovement : MonoBehaviour
             isJumping = false;
         }
 
+    }
+
+
+    private void FixedUpdate()
+    {
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

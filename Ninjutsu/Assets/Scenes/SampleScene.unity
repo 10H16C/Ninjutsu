@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 2104461263}
   - component: {fileID: 2104461262}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: PlayerObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -607,11 +607,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc09fa71bbb6674dac3e4c19928716a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 6
+  startingSpeed: 10
   jumpForce: 4
-  deathJumpForce: 10
+  deathJumpForce: 6
   checkRadius: 0.3
-  fallTimer: 1
+  fallTimer: 0.75
   ground:
     serializedVersion: 2
     m_Bits: 1048576
@@ -630,10 +630,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 5
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
